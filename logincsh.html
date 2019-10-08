@@ -1,0 +1,48 @@
+﻿﻿@model ESCO.Models.LoginViewModel
+@{
+    ViewBag.Title = Account.CompaniesLogin;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <!-- START Login Container-->
+    <div class="login-container bg-white rounded-sm mt-3">
+        <div class="p-4 p-md-5 ">
+            <div class="bold h6 mb-3 text-dark">@Account.CompaniesLogin</div>
+            <!-- START Login Form -->
+                <!-- START Form Control-->
+                <div class="form-group form-group-default">
+                    <label>@Html.LabelFor(model => model.Email)</label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @type = "email", maxlength = "50", autocomplete = "off", autofocus = "" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
+                </div>
+                <!-- END Form Control-->
+                <!-- START Form Control-->
+                <div class="form-group form-group-default">
+                    <label>@Html.LabelFor(model => model.Password)</label>
+                    <div class="controls">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
+                </div>
+                <!-- START Form Control-->
+                <div class="row">
+					<!-- EDITED: changed justify-content-end into justify-content-start -->
+                    <div class=" d-flex align-items-center  my-3 justify-content-between">
+                        @Html.ActionLink(Account.ForgetPassword, "ForgotPassword", "Account", new { }, new { @class = "text-info small m-3" })
+                        @Html.ActionLink(Account.Register, "Register", "Company")
+                    </div>
+                </div>
+                <!-- END Form Control-->
+                <div class="d-flex justify-content-end">
+                <button type="submit" id="btnLogin" class="btn btn-primary btn-cons m-t-10">@Account.Login</button>
+                </div>
+            <!--END Login Form-->
+        </div>
+    </div>
+    <!-- END Login Container-->
+}

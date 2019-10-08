@@ -1,0 +1,367 @@
+﻿﻿﻿@model ESCO.Models.CompanyUserProfile
+
+@{
+    ViewBag.Title = Company.Profile;
+    Layout = "~/Views/Shared/_NewCompanyLayout.cshtml";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#ddlCompanyType").val() == 2) {
+                $("#ddlCompanyStatus").prop('disabled', true);
+            }
+            else {
+                $("#ddlCompanyStatus").prop('disabled', false);
+            }
+        });
+
+        function ChangeLicenseType() {
+            if ($("#ddlCompanyType").val() == 2) {
+                $("#ddlCompanyStatus").prop('disabled', true);
+                $("#ddlCompanyStatus").val('2');
+            }
+            else {
+                $("#ddlCompanyStatus").prop('disabled', false);
+                $("#ddlCompanyStatus").val('');
+            }
+        }
+
+        function validate() {
+            if (($('#chkEnerygyDataReview').prop('checked') || $('#chkEnergyAudit').prop('checked') || $('#chkEnergyDesignReview').prop('checked') ||
+                        $('#chkEnergyEfficiencyProjectManagement').prop('checked') || $('#chkEnergyMeasurementAndVerification').prop('checked') ||
+                        $('#chkDesignAndEngineeringOfEnergyEfficiencyMeasures').prop('checked'))) {
+                return true;
+            }
+            else {
+                ShowAlertText();
+                return false;
+            }
+        }
+
+        function ShowAlertText() {
+            alert('Please check atleast one Company Activity ');
+        }
+
+    </script>
+}
+<div class=" container  p-0 m-auto ">
+@using (Html.BeginForm("Profile", "Company", FormMethod.Post, new { enctype = "multipart/form-data", id = "formToSendEmail" }))
+{
+    @Html.AntiForgeryToken()
+	<!-- added this row div and removed it from newCompany_layout -->
+	<div class="row m-0 align-items-start profile">
+    <div class="col-md-3 col-sm-12">
+        <!-- START ITEM -->
+        <div class="card share bg-white no-border d-flex justify-content-center p-3 rounded-sm align-items-center flex-column">
+            <div class="image-container relative overflow-hidden width-fit bg-light p-3 rounded-circle">
+                <img src="@Url.Content("~/Content/New/assets/img/logo.svg")" class="img-fluid" alt="company name logo">
+            </div>
+            <h1 class="h5 text-capitalize text-dark text-center text-truncate full-width">
+                Company name
+            </h1>
+			<!--changed button into input image upload -->
+                                            <button class="btn no-border bg-green text-white image-upload-btn   mt-3 text-capitalize relative overflow-hidden">
+                                    <input type="file">
+                                    upload
+                                    logo</button>
+            <!-- END ITEM -->
+        </div>
+    </div>
+
+    <div class="col-md-9 col-sm-12">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.CompanyID)
+        @Html.HiddenFor(m => Model.OnLoadCompanyStatusID)
+        @Html.HiddenFor(m => m.LicenseStatus)
+        <div class="card share bg-white no-border d-flex justify-content-center p-3 rounded-sm align-items-center flex-column">
+            <div class="card-title h4 bold text-dark text-left full-width mb-5">
+                User Profile
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" f or="txtName">
+                    @Html.LabelFor(model => model.Name)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Name, new { id = "txtName", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtEmail">
+                    @Html.LabelFor(model => model.Email)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtCitizenshipID">
+                    @Html.LabelFor(model => model.CitizenshipID)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.CitizenshipID, new { id = "txtCitizenshipID", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtMobile">
+                    @Html.LabelFor(model => model.Mobile)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Mobile, new { id = "txtMobile", @class = "form-control input-lg", minlength = "10", maxlength = "15" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtTelephone">
+                    @Html.LabelFor(model => model.Telephone)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Telephone, new { id = "txtTelephone", @class = "form-control input-lg", minlength = "10", maxlength = "15" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtFax">
+                    @Html.LabelFor(model => model.Fax)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Fax, new { id = "txtFax", @class = "form-control input-lg", minlength = "10", maxlength = "15" })
+                </div>
+            </div>
+            <!-- END ITEM -->
+        </div>
+
+        <div class="card share bg-white no-border d-flex justify-content-center p-3 rounded-sm align-items-center flex-column">
+            <div class="card-title h4 bold text-dark text-left full-width mb-5">
+                Company Profile
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtCompanyNameAR">
+                    @Html.LabelFor(model => model.CompanyNameAR)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.CompanyNameAR, new { id = "txtCompanyNameAR", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtCompanyNameEN">
+                    @Html.LabelFor(model => model.CompanyNameEN)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Email, new { id = "txtCompanyNameEN", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtCRNumber">
+                    @Html.LabelFor(model => model.CRNumber)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.CRNumber, new { id = "txtCRNumber", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtEstablishingDate">
+                    @Html.LabelFor(model => model.EstablishingDate)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.EstablishingDate, new { id = "txtEstablishingDate", @class = "form-control input-lg", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="ddlCompanyType">
+                    @Html.LabelFor(model => model.CompanyTypeID)
+                </label>
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.CompanyTypeID, new SelectList(Model.ListCompanyType, "CompanyTypeID", "CompanyTypeName"), "Select Type", new { id = "ddlCompanyType", @class = "form-control input-lg", onchange = "ChangeLicenseType()" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="ddlCompanyStatus">
+                    @Html.LabelFor(model => model.CompanyStatusID)
+                </label>
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.CompanyStatusID, new SelectList(Model.ListCompanyStatus, "StatusID", "StatusName"), "Select License", new { id = "ddlCompanyStatus", @class = "form-control input-lg" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtCompanyType">
+                    @Html.LabelFor(model => model.CompanyType)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.CompanyType, new { id = "txtCompanyType", @class = "form-control input-lg", maxlength = "20" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtNumberOfEmployees">
+                    @Html.LabelFor(model => model.NumberOfEmployees)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.NumberOfEmployees, new { id = "txtNumberOfEmployees", @class = "form-control input-lg", maxlength = "12" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtWebsite">
+                    @Html.LabelFor(model => model.Website)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Website, new { id = "txtWebsite", @class = "form-control input-lg", maxlength = "200" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtAddress">
+                    @Html.LabelFor(model => model.Address)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Address, new { id = "txtAddress", @class = "form-control input-lg", maxlength = "200" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="ddlCity">
+                    @Html.LabelFor(model => model.CityID)
+                </label>
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.CityID, new SelectList(Model.Cities, "CityID", "CityName"), "Select Cities", new { id = "ddlCity", @class = "form-control input-lg" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 control-label text-dark" for="txtPOBox">
+                    @Html.LabelFor(model => model.POBox)
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.POBox, new { id = "txtPOBox", @class = "form-control input-lg", maxlength = "9" })
+                </div>
+            </div>
+            <!-- END ITEM -->
+        </div>
+
+        <div class="card share bg-white no-border d-flex justify-content-center p-3 rounded-sm align-items-center flex-column">
+            <div class="card-title h4 bold text-dark text-left full-width mb-5">
+                Company Activities
+            </div>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="bg-green text-white">#</th>
+                                <th scope="col" class="bg-green text-white">Activity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+						<!-- 	changed the th tag into td with class bold
+							-->
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.DesignAndEngineering, new { id = "chkDesignAndEngineeringOfEnergyEfficiencyMeasures", aria_label = "..." })</td>
+                                <td>@Html.Label("Design and Engineering of Energy Efficiency Measures", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.ProjectManagement, new { id = "chkEnergyEfficiencyProjectManagement", aria_label = "..." })</td>
+                                <td>@Html.Label("Energy Efficiency Project Management", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.DataReview, new { id = "chkEnerygyDataReview", aria_label = "..." })</td>
+                                <td>@Html.Label("Energy Audit", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.Audit, new { id = "chkEnergyAudit", aria_label = "..." })</td>
+                                <td>@Html.Label("Energy Measurement and Verification", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.MeasurementAndVerification, new { id = "chkEnergyMeasurementAndVerification", aria_label = "..." })</td>
+                                <td>@Html.Label("Audit and Energy Data Review", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Html.CheckBoxFor(model => model.DesignReview, new { id = "chkEnergyDesignReview", aria_label = "..." })</td>
+                                <td>@Html.Label("Energy Design Review", new { @class = "text-muted", @style = "font-size:inherit;padding:5px;" })</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END ITEM -->
+        </div>
+      
+        <div class="card share bg-white no-border d-flex justify-content-center p-3 rounded-sm align-items-center flex-column">
+            <div class="card-title h4 bold text-dark text-left full-width mb-5">
+                Company Documents
+            </div>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="bg-green text-white">Document</th>
+                                <th scope="col" class="bg-green text-white">Download</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+							<!-- added classes in a tag and changed font icon 
+								changed the th tag into td with class bold
+							-->
+
+                                <td class='bold'>@Company.CRNumber</td>
+                                <td>
+                                    @if (Model.CommercialRegistration != "")
+                                    {
+                                        <a class="btn btn-xs bg-light-green px-3 text-white no-border" href="~/Handlers/Download.ashx?path=@ESCO.Utilities.StringCipher.Encrypt(Model.CommercialRegistration)" download><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Company.CoC</td>
+                                <td>
+                                    @if (Model.COC != "")
+                                    {
+                                        <a class="btn btn-xs bg-light-green px-3 text-white no-border" href="~/Handlers/Download.ashx?path=@ESCO.Utilities.StringCipher.Encrypt(Model.COC)" download><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Company.GOSI</td>
+                                <td>
+                                    @if (Model.GOSI != "")
+                                    {
+                                        <a class="btn btn-xs bg-light-green px-3 text-white no-border" href="~/Handlers/Download.ashx?path=@ESCO.Utilities.StringCipher.Encrypt(Model.GOSI)" download><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>@Company.ZITC</td>
+                                <td>
+                                    @if (Model.ZITC != "")
+                                    {
+                                        <a class="btn btn-xs bg-light-green px-3 text-white no-border" href="~/Handlers/Download.ashx?path=@ESCO.Utilities.StringCipher.Encrypt(Model.ZITC)" download><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='bold'>Contract Document</td>
+                                <td>
+                                    @if (Model.ContractDocument != "")
+                                    {
+                                        <a class="btn btn-xs bg-light-green px-3 text-white no-border" href="~/Handlers/Download.ashx?path=@ESCO.Utilities.StringCipher.Encrypt(Model.ContractDocument)" download><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br>
+            <div class="row text-right full-width">
+                <div class="col-md-12">
+                    <button class="btn bg-green text-white no-border" data-toggle="modal" data-target='#confirm_save' type="button">
+                        @Shared.btnSave
+                    </button>
+                </div>
+            </div>
+            <!-- END ITEM -->
+        </div>
+    </div>
+    </div>    
+    
+}
+</div>    

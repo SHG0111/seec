@@ -1,0 +1,245 @@
+﻿@model ESCO.Models.CompanyDashboardViewModel
+@{
+    ViewBag.Title = Shared.lnkHome;
+    Layout = "~/Views/Shared/_NewCompanyLayout.cshtml";
+}
+
+<script type="text/javascript">
+    function confirmDel(node) {
+        return confirm("Are you sure you want to delete this draft?");
+    }
+</script>
+<div class="row m-0 align-items-start profile">
+
+<!-- START NEW REQUEST CARD -->
+<div class="col-lg-3 col-sm-6 d-flex flex-column">
+    <!-- START ITEM -->
+    <div class="card social-card share kanban-card add-licence-card full-width no-border"
+         data-social="item">
+        <div class="card-header no-hover d-flex justify-content-between align-items-center ">
+            <h5 class="text-dark text-left h6 text-capitalize">@Company.NewRequest</h5>
+        </div>
+        <div class="card-description inherit-height text-center ">
+            <div class="bg-light py-0 full-height d-flex align-items-center justify-content-center rounded-sm">
+
+                <a class="btn btn-link d-flex align-items-center justify-content-center add-licence-btn"
+                   href="@Url.Action("Index", "License")">
+                    <div class="rounded-circle m-0 add-circle text-white bg-light-gray">
+                        <i class="fa fa-plus"></i>
+                    </div>
+
+                    <div class="h6 my-0 mx-2 text-dark text-capitalize bold">
+                        @LicenseResource.ApplyNewLicense
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- END ITEM -->
+
+</div>
+<!-- END NEW REQUEST CARD -->
+
+<div class="col-lg-3 col-sm-6 d-flex flex-column">
+    <!-- START WIDGET widget_map_sales-->
+    <!-- START ITEM -->
+    <div class="card social-card share kanban-card   full-width  no-border" data-social="item">
+        <div class="card-header no-hover d-flex justify-content-between align-items-center">
+            <h5 class="text-dark  text-left h6 text-capitalize">
+                <i class="fa fa-circle text-warning fs-11"></i>
+                @Company.DraftedRequests ( @((Model.drafts != null) ? @Model.drafts.Count : 0) )
+            </h5>
+        </div>
+        <div class="card-description scrollable">
+            @if (Model != null && Model.drafts != null && Model.drafts.Count > 0)
+            {
+                foreach (var item in Model.drafts)
+                {
+                    <div class="bg-light py-2 d-flex mb-2 align-items-end  px-2 rounded-sm">
+                        <div class="flex-basis-100">
+                            <b class="text-capitalize">
+                                <b class="text-dark">
+                                    @if (ESCO.Helpers.CultureHelper.IsRighToLeft())
+                                    {
+                                        @item.LicenseTypeAR
+                                    }
+                                    else
+                                    {
+                                        @item.LicenseTypeEN
+                                    }
+                                </b>
+                            </b>
+                            <p class="opacity-6 bold text-secondary mb-3">@item.DraftedOn</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="label py-1 text-black label-warning d-inline bold text-capitalize">
+                                    @if (ESCO.Helpers.CultureHelper.IsRighToLeft())
+                                    {
+                                        @item.LicenseStatusAR
+                                    }
+                                    else
+                                    {
+                                        @item.LicenseStatusEN
+                                    }
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <a data-toggle="tooltip" href='@Url.Content("~/License/Create/" + @item.LicenseCompaniesID)'
+                                       class="btn btn-link py-0 px-2 mx-2 line-height-0 v-align-middle fs-16 text-dark"
+                                       data-placement='top' title='edit'>
+                                        <i class="fa fa-pencil-square-o "></i>
+                                    </a>
+                                    <a data-toggle="tooltip" href='@Url.Content("~/Company/DeleteDraft/" + @item.LicenseCompaniesID)'
+                                       class="btn btn-link py-0 px-2 line-height-0 v-align-middle fs-16 text-dark"
+                                       data-placement='top' title='delete' onclick='return confirmDel(this);'>
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <!-- END ITEM -->
+    <!-- END WIDGET -->
+</div>
+
+<div class="col-lg-3 col-sm-12 d-flex flex-column ">
+    <!-- START ITEM -->
+    <div class="card social-card share kanban-card   full-width  no-border" data-social="item">
+        <div class="card-header no-hover d-flex justify-content-between align-items-center ">
+            <h5 class="text-dark text-left h6 m-0 text-capitalize">
+                <i class="fa fa-circle text-success fs-11"></i>
+                @Company.CurrentRequests ( @((Model.currents != null) ? @Model.currents.Count : 0) )
+            </h5>
+        </div>
+        <div class="card-description scrollable">
+            @if (Model != null && Model.currents != null && Model.currents.Count > 0)
+            {
+                foreach (var item in Model.currents)
+                {
+                    <div class="bg-light py-2 d-flex mb-2 align-items-end  px-2 rounded-sm">
+                        <div class="flex-basis-100">
+                            <p class="text-secondary small bold text-capitalize">
+                                @if (ESCO.Helpers.CultureHelper.IsRighToLeft())
+                                {
+                                    @item.LicenseTypeAR
+                                }
+                                else
+                                {
+                                    @item.LicenseTypeEN
+                                }
+                            </p>
+                            <b class="text-capitalize">
+                                <a href="@Url.Action("Details", "License", new { id = item.LicenseCompaniesID })" class="text-dark">@item.LicenseNumber</a>
+                            </b>
+                            <p class="opacity-6 bold text-secondary mb-3">@item.LastModifiedOn.ToString("dd/MM/yyyy")</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="label py-1 label-success text-black d-inline bold text-capitalize">
+                                    @if (ESCO.Helpers.CultureHelper.IsRighToLeft())
+                                    {
+                                        @item.LicenseStatusAR
+                                    }
+                                    else
+                                    {
+                                        @item.LicenseStatusEN
+                                    }
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <a data-toggle="tooltip" href='#'
+                                       class="btn btn-link py-0 px-2 mx-2 line-height-0 v-align-middle fs-16 text-dark"
+                                       data-placement='top' title='inovice receipt pdf'>
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </a>
+                                    <a data-toggle="tooltip" href='#'
+                                       class="btn btn-link py-0 px-2 line-height-0 v-align-middle fs-16 text-dark"
+                                       data-placement='top' title='confirm payment'>
+                                        <i class="fa fa-credit-card"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <!-- END ITEM -->
+</div>
+<div class="col-lg-3 col-sm-6 d-flex flex-column ">
+        <!-- START ITEM -->
+        <div class="card social-card share kanban-card   full-width  no-border" data-social="item">
+            <div class="card-header no-hover d-flex justify-content-between align-items-center ">
+                <h5 class="text-dark text-left h6 m-0 text-capitalize">completed requests <i
+                        class="fa fa-circle text-success fs-11"></i></h5>
+            </div>
+            <div class="card-description scrollable">
+                <div class="bg-light py-2 d-flex mb-2 align-items-end  px-2 rounded-sm">
+                    <div class="flex-basis-100">
+                        <p class="text-secondary small bold text-capitalize">company name</p>
+                        <b class=" text-capitalize">
+                            <a href="#" class="text-dark"> 231564849846523156 </a>
+                        </b>
+                        <p class="opacity-6 bold text-secondary mb-3">26/8/2019</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div
+                                class="label py-1 label-success text-black d-inline bold text-capitalize ">
+                                accepted</div>
+                            <div class="d-flex align-items-center">
+                                <a data-toggle="tooltip" href='#'
+                                    class="btn btn-link py-0 px-2 mx-2 line-height-0 v-align-middle fs-16 text-dark"
+                                    data-placement='top' title='inovice receipt pdf'><i
+                                        class="fa fa-file-pdf-o"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light py-2 d-flex mb-2 align-items-end  px-2 rounded-sm">
+                    <div class="flex-basis-100">
+                        <p class="text-secondary small bold text-capitalize">company name</p>
+                        <b class=" text-capitalize">
+                            <a href="#" class="text-dark"> 231564849846523156 </a>
+                        </b>
+                        <p class="opacity-6 bold text-secondary mb-3">26/8/2019</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div
+                                class="label py-1 label-danger text-black d-inline bold text-capitalize ">
+                                rejected</div>
+                            <div class="d-flex align-items-center">
+                                <a data-toggle="tooltip" href='#'
+                                    class="btn btn-link py-0 px-2 mx-2 line-height-0 v-align-middle fs-16 text-dark"
+                                    data-placement='top' title='rejection reason'><i
+                                        class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light py-2 d-flex mb-2 align-items-end  px-2 rounded-sm">
+                    <div class="flex-basis-100">
+                        <p class="text-secondary small bold text-capitalize">company name</p>
+                        <b class=" text-capitalize">
+                            <a href="#" class="text-dark"> 231564849846523156 </a>
+                        </b>
+                        <p class="opacity-6 bold text-secondary mb-3">26/8/2019</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div
+                                class="label py-1 label-danger text-black d-inline bold text-capitalize ">
+                                rejected</div>
+                            <div class="d-flex align-items-center">
+                                <a data-toggle="tooltip" href='#'
+                                    class="btn btn-link py-0 px-2 mx-2 line-height-0 v-align-middle fs-16 text-dark"
+                                    data-placement='top' title='rejection reason'><i
+                                        class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <!-- END ITEM -->
+
+    </div>
+</div>
